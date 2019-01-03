@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Buku Tamu</string>
+    <string name="menu_add_name">Add</string>
+    <string name="menu_list_name">Daftar Tamu</string>
+</resources>

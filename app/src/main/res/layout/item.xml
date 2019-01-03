@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="#ddd"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:stretchColumns="1"
+        android:shrinkColumns="1">
+
+        <TableRow>
+            <TextView
+                android:text="Nama Tamu"
+                android:textSize="12dp"
+                android:textColor="#000"
+                android:layout_gravity="left"/>
+            <TextView
+                android:id="@+id/guest_name"
+                android:text=""
+                android:textSize="12dp"
+                android:layout_gravity="left"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Nama Perusahaan"
+                android:textSize="12dp"
+                android:textColor="#000"
+                android:layout_gravity="left"/>
+            <TextView
+                android:id="@+id/company_name"
+                android:text=""
+                android:textSize="12dp"
+                android:layout_gravity="left"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Orang Yang Ditemui    "
+                android:textSize="12dp"
+                android:textColor="#000"
+                android:layout_gravity="left"/>
+            <TextView
+                android:id="@+id/meet"
+                android:text=""
+                android:textSize="12dp"
+                android:layout_gravity="left"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Keperluan"
+                android:textSize="12dp"
+                android:textColor="#000"
+                android:layout_gravity="left"/>
+            <TextView
+                android:id="@+id/need"
+                android:text=""
+                android:textSize="12dp"
+                android:layout_gravity="left"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Waktu Kedatangan"
+                android:textSize="12dp"
+                android:textColor="#000"
+                android:layout_gravity="left"/>
+            <TextView
+                android:id="@+id/arrival"
+                android:text=""
+                android:textSize="12dp"
+                android:layout_gravity="left"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Waktu Keluar"
+                android:textSize="12dp"
+                android:textColor="#000"
+                android:layout_gravity="left"/>
+            <TextView
+                android:id="@+id/out"
+                android:text=""
+                android:textSize="12dp"
+                android:layout_gravity="left"/>
+        </TableRow>
+
+    </TableLayout>
+
+    <ImageView
+        android:id="@+id/img_v"
+        android:layout_marginLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_weight="2"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>
