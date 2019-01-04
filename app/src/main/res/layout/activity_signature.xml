@@ -22,7 +22,7 @@
         xmlns:sign="http://schemas.android.com/apk/res-auto"
         android:id="@+id/signature_view"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         sign:penSize="2dp"
         sign:backgroundColor="#ffffff"
         sign:penColor="#000000"

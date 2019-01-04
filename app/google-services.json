@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "737728236472",
+    "firebase_url": "https://lobbybb-4df2d.firebaseio.com",
+    "project_id": "lobbybb-4df2d",
+    "storage_bucket": "lobbybb-4df2d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737728236472:android:dd6d99efbaf84740",
+        "android_client_info": {
+          "package_name": "com.daphino.bukutamu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "737728236472-g38udckt9amlqsnlrbcm1hvu725rrh2v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.daphino.bukutamu",
+            "certificate_hash": "dbea87aa42683a2c834f12e07e8839200fae2c07"
+          }
+        },
+        {
+          "client_id": "737728236472-vcj8t5h3anif2mdsnbrrq1vee43hejfe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnNCJezm9dGImiTKah1t_GYLEPSeSx-x8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "737728236472-vcj8t5h3anif2mdsnbrrq1vee43hejfe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

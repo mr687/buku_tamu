@@ -1,10 +1,39 @@
 package com.daphino.bukutamu;
 
 public class Tamu {
+    public String id;
     public String guest_name;
     public String company_name;
     public String meet;
     public String need;
+    public String arrival;
+    public String out;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setArrival(String arrival) {
+        this.arrival = arrival;
+    }
+
+    public void setOut(String out) {
+        this.out = out;
+    }
+
+    public String getArrival() {
+
+        return arrival;
+    }
+
+    public String getOut() {
+        return out;
+    }
+
     public String signature;
 
     public String getGuest_name() {
