@@ -1,0 +1,4 @@
+#Sat Jan 05 20:14:04 ICT 2019
+base.0=D\:\\Android\\Projects\\BukuTamu\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\10
+path.0=classes.dex
+renamed.0=classes.dex

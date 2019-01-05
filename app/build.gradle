@@ -26,6 +26,10 @@ android {
             debuggable false
             signingConfig signingConfigs.config
         }
+        debug {
+            debuggable false
+            signingConfig signingConfigs.config
+        }
     }
 }
 
@@ -43,4 +47,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.borax12.materialdaterangepicker:library:1.9'
 }

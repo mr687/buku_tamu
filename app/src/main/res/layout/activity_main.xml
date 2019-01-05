@@ -20,20 +20,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:padding="10dp">
 
-            <TextView
-                android:id="@+id/kosong"
-                android:layout_width="match_parent"
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:visibility="gone"
-                android:textSize="17dp"
-                android:text="Daftar tamu kosong."/>
+                android:layout_centerInParent="true"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview"
@@ -42,7 +38,7 @@
 
             </android.support.v7.widget.RecyclerView>
 
-        </LinearLayout>
+        </RelativeLayout>
     </ScrollView>
 
 </LinearLayout>

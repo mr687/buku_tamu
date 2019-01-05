@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">737728236472-vcj8t5h3anif2mdsnbrrq1vee43hejfe.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://lobbybb-4df2d.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">737728236472</string>
+    <string name="google_api_key" translatable="false">AIzaSyCnNCJezm9dGImiTKah1t_GYLEPSeSx-x8</string>
+    <string name="google_app_id" translatable="false">1:737728236472:android:dd6d99efbaf84740</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCnNCJezm9dGImiTKah1t_GYLEPSeSx-x8</string>
+    <string name="google_storage_bucket" translatable="false">lobbybb-4df2d.appspot.com</string>
+    <string name="project_id" translatable="false">lobbybb-4df2d</string>
+</resources>

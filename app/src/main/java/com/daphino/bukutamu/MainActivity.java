@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,23 +19,35 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.borax12.materialdaterangepicker.date.DatePickerDialog;
+import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
+import com.borax12.materialdaterangepicker.time.TimePickerDialog;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements TimePickerDialog.OnTimeSetListener {
     RecyclerView recyclerView;
     List<Tamu> listTamu;
     Cursor cursor;
     DBHelper helper;
     Toolbar toolbar;
     RecyclerAdapterTamu adapterTamu;
-    TextView kosong;
+    DatabaseReference databaseReference;
+    ProgressBar progressBar;
+    String tm;
+    int pos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +57,17 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(Html.fromHtml("<font color='#ffffff'>Daftar Tamu </font>"));
 
         listTamu = new ArrayList<Tamu>();
-        kosong = (TextView) findViewById(R.id.kosong);
+        tm = "";
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         helper = new DBHelper(getApplicationContext());
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-        refreshList();
+        databaseReference = FirebaseDatabase.getInstance().getReference("bukutamu");
+
+
+        loadFirebase();
+//        refreshList();
     }
 
     @Override
@@ -70,7 +88,48 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    public void loadFirebase(){
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                listTamu.clear();
+                progressBar.setVisibility(View.GONE);
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Tamu tamu = snapshot.getValue(Tamu.class);
+                    listTamu.add(tamu);
+                }
 
+                adapterTamu  = new RecyclerAdapterTamu(MainActivity.this,listTamu);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                recyclerView.setAdapter(adapterTamu);
+
+                adapterTamu.setOnItemClickListener(new RecyclerAdapterTamu.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(final int position) {
+                        pos = position;
+                        if(!listTamu.get(position).getOut().equals("-")){
+                            return;
+                        }
+                        Calendar now = Calendar.getInstance();
+                        TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(
+                                MainActivity.this,
+                                now.get(Calendar.HOUR_OF_DAY),
+                                now.get(Calendar.MINUTE),
+                                true);
+                        timePickerDialog.show(getFragmentManager(),"Time Picker Dialog");
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(MainActivity.this,databaseError.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
     public void refreshList(){
         try{
             listTamu = new ArrayList<>();
@@ -94,58 +153,38 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(listTamu.size() > 0){
-                    kosong.setVisibility(View.GONE);
                     adapterTamu  = new RecyclerAdapterTamu(this,listTamu);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                     recyclerView.setLayoutManager(layoutManager);
                     recyclerView.setItemAnimator(new DefaultItemAnimator());
                     recyclerView.setAdapter(adapterTamu);
-                }else{
-                    kosong.setVisibility(View.VISIBLE);
                 }
-
-                adapterTamu.setOnItemClickListener(new RecyclerAdapterTamu.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(final int position) {
-                        final CharSequence[] menuItem = {"Tamu Keluar"};
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle("Aksi");
-                        builder.setItems(menuItem, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which){
-                                    case 0:
-                                        Utils utils = new Utils();
-                                        String id = listTamu.get(position).getId();
-                                        if(helper.updateData(listTamu.get(position).getId().toString(),utils.getToday())){
-                                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("bukutamu").child(id);
-                                            Tamu tamu = new Tamu();
-                                            tamu.setId(listTamu.get(position).getId());
-                                            tamu.setGuest_name(listTamu.get(position).getGuest_name());
-                                            tamu.setCompany_name(listTamu.get(position).getCompany_name());
-                                            tamu.setMeet(listTamu.get(position).getMeet());
-                                            tamu.setNeed(listTamu.get(position).getNeed());
-                                            tamu.setArrival(listTamu.get(position).getArrival());
-                                            tamu.setSignature(listTamu.get(position).getSignature());
-                                            tamu.setOut(utils.getToday());
-                                            databaseReference.setValue(tamu);
-                                            Toast.makeText(MainActivity.this,"Tamu sudah keluar.",Toast.LENGTH_LONG).show();
-                                            refreshList();
-                                        }
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        });
-                        if(listTamu.get(position).getOut().equals("-")){
-                            builder.create().show();
-                        }
-                    }
-                });
             }
         }catch (Exception ex){
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
+        tm = String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute);
+        if(tm != ""){
+            Utils utils = new Utils();
+            String id = listTamu.get(pos).getId();
+            DatabaseReference dr = FirebaseDatabase.getInstance().getReference("bukutamu").child(id);
+            Tamu tamu = new Tamu();
+            tamu.setId(listTamu.get(pos).getId());
+            tamu.setGuest_name(listTamu.get(pos).getGuest_name());
+            tamu.setCompany_name(listTamu.get(pos).getCompany_name());
+            tamu.setMeet(listTamu.get(pos).getMeet());
+            tamu.setNeed(listTamu.get(pos).getNeed());
+            tamu.setArrival(listTamu.get(pos).getArrival());
+            tamu.setSignature(listTamu.get(pos).getSignature());
+            tamu.setOut(utils.getTodays() + " " + tm);
+            dr.setValue(tamu);
+            Toast.makeText(MainActivity.this,"Tamu sudah keluar.",Toast.LENGTH_LONG).show();
+            listTamu.clear();
+        }
+        tm ="";
     }
 }

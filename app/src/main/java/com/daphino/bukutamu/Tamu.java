@@ -8,6 +8,7 @@ public class Tamu {
     public String need;
     public String arrival;
     public String out;
+    public String signature;
 
     public String getId() {
         return id;
@@ -33,8 +34,6 @@ public class Tamu {
     public String getOut() {
         return out;
     }
-
-    public String signature;
 
     public String getGuest_name() {
         return guest_name;

@@ -1,0 +1,7 @@
+#Internal package file, do not edit.
+#Sat Jan 05 20:13:44 ICT 2019
+0.baseType=DIRECTORY
+0.base=D\:\\Android\\Projects\\BukuTamu\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
+0.path=fonts/Roboto-Medium.ttf
+0.set=ASSET
+count=1

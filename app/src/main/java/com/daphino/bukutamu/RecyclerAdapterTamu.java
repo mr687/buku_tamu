@@ -46,6 +46,7 @@ public class RecyclerAdapterTamu extends RecyclerView.Adapter<RecyclerAdapterTam
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
+        Utils utils = new Utils();
         final  Tamu tamu = listTamu.get(i);
         holder.guest_name.setText(tamu.getGuest_name());
         holder.company_name.setText(tamu.getCompany_name());
@@ -53,10 +54,11 @@ public class RecyclerAdapterTamu extends RecyclerView.Adapter<RecyclerAdapterTam
         holder.need.setText(tamu.getNeed());
         holder.arrival.setText(tamu.getArrival());
         holder.out.setText(tamu.getOut());
-        File img = new File(tamu.getSignature());
-        if(img.exists()){
-            Picasso.with(this.context).load(img).into(holder.img_v);
-        }
+//        holder.img_v.setImageBitmap(utils.convert(tamu.getSignature()));
+        Picasso.with(this.context)
+                .load(tamu.getSignature())
+                .placeholder(R.mipmap.ic_launcher)
+                .into(holder.img_v);
     }
 
     @Override

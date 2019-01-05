@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,20 +34,24 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.kyanogen.signatureview.SignatureView;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.BitSet;
 
 public class InputActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
-    public String pathSign1;
-    Bitmap bitmap;
     DBHelper helper;
     EditText guest_name,company_name,meet,need;
     Button save_button;
     Uri imageUri;
     ProgressBar progressBar;
-    Utils utils = new Utils();
+    Utils utils;
+    SignatureView signatureView;
+    Bitmap bmp;
+    TextView resetSignature;
 
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
@@ -65,37 +70,32 @@ public class InputActivity extends AppCompatActivity implements View.OnClickList
         meet = (EditText) findViewById(R.id.meet);
         need = (EditText) findViewById(R.id.need);
         save_button = (Button) findViewById(R.id.save_button);
+        signatureView = (SignatureView)  findViewById(R.id.signature_view);
+        resetSignature = (TextView) findViewById(R.id.resetSignature);
+
+        utils = new Utils();
 
         storageReference = FirebaseStorage.getInstance().getReference("signatures");
         databaseReference = FirebaseDatabase.getInstance().getReference("bukutamu");
 
         helper = new DBHelper(getApplicationContext());
 
-        findViewById(R.id.signature_view).setOnClickListener(new View.OnClickListener() {
+        resetSignature.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent it = new Intent(getBaseContext(),SignatureActivity.class);
-                startActivityForResult(it,123);
+            public void onClick(View v) {
+                signatureView.clearCanvas();
             }
         });
 
         save_button.setOnClickListener(this);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == 123){
-            if(resultCode == Activity.RESULT_OK){
-                pathSign1 = data.getStringExtra("path");
-                imageUri = Uri.fromFile(new File(pathSign1));
-                File signatureimage = new File(pathSign1);
-                if(signatureimage.exists()){
-                    bitmap = BitmapFactory.decodeFile(signatureimage.getAbsolutePath());
-                    ImageView signature_view = (ImageView) findViewById(R.id.signature_view);
-                    signature_view.setImageBitmap(bitmap);
-                }
-            }
+    private String getBase64Signature(){
+        bmp = signatureView.getSignatureBitmap();
+        if(bmp != null){
+            return utils.convert(bmp);
         }
+        return null;
     }
 
     @Override
@@ -118,18 +118,8 @@ public class InputActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        String msg="";
         if(v == save_button){
-            if(pathSign1 == ""){
-                msg="Tanda tangan harus diisi.";
-                return;
-            }
             uploadToFirebase();
-        }else{
-            msg="Data gagal disimpan.";
-        }
-        if(msg != ""){
-            Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
         }
     }
 
@@ -139,22 +129,23 @@ public class InputActivity extends AppCompatActivity implements View.OnClickList
 
     private boolean uploadToSQLITE(String id){
         if(helper.insertData(id,guest_name.getText().toString(),company_name.getText().toString(),
-                    meet.getText().toString(),need.getText().toString(),utils.getToday(),"-",pathSign1)){
+                    meet.getText().toString(),need.getText().toString(),utils.getToday(),"-",getBase64Signature())){
                 return true;
             }
         return false;
     }
 
     private void uploadToFirebase(){
-        if(imageUri == null){
+        bmp = signatureView.getSignatureBitmap();
+        if(bmp == null){
             Toast.makeText(InputActivity.this,"Tanda tangan kosong.",Toast.LENGTH_LONG).show();
             return;
         }
+        imageUri = utils.getImageUri(getBaseContext(),bmp);
         Toast.makeText(InputActivity.this,"Sedang upload...",Toast.LENGTH_LONG).show();
-        progressBar.setVisibility(View.VISIBLE);
         final String unique = System.currentTimeMillis()+"";
         StorageReference fileReference = storageReference.child(unique
-                                + "." + getFileExtension(imageUri));
+                                + ".jpg");
         fileReference.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override

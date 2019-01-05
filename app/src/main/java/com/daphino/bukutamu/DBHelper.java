@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS Tamu(id text null, guest_name text null, company_name text null, " +
-                "meet text null,need text null,arrival text null,out text null,signature text null)");
+                "meet text null,need text null,arrival text null,out text null,signature blob null)");
     }
 
     @Override

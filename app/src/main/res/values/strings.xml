@@ -2,4 +2,5 @@
     <string name="app_name">Buku Tamu</string>
     <string name="menu_add_name">Add</string>
     <string name="menu_list_name">Daftar Tamu</string>
+    <string name="reset_tanda_tangan"><u>Reset tanda tangan</u></string>
 </resources>
