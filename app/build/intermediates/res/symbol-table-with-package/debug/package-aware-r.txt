@@ -1326,6 +1326,7 @@ id pin
 id progress_bar
 id progress_circular
 id progress_horizontal
+id query
 id radio
 id recyclerview
 id resetSignature
@@ -1343,6 +1344,7 @@ id scrollIndicatorDown
 id scrollIndicatorUp
 id scrollView
 id scrollable
+id search
 id search_badge
 id search_bar
 id search_button

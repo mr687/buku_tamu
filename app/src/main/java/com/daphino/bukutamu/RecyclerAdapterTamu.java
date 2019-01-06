@@ -58,6 +58,7 @@ public class RecyclerAdapterTamu extends RecyclerView.Adapter<RecyclerAdapterTam
         Picasso.with(this.context)
                 .load(tamu.getSignature())
                 .placeholder(R.mipmap.ic_launcher)
+                .fit()
                 .into(holder.img_v);
     }
 

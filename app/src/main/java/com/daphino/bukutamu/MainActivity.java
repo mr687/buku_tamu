@@ -1,5 +1,6 @@
 package com.daphino.bukutamu;
 
+import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,11 +14,16 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,11 +36,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
+import java.util.Queue;
 
 public class MainActivity extends AppCompatActivity
         implements TimePickerDialog.OnTimeSetListener {
@@ -47,6 +56,9 @@ public class MainActivity extends AppCompatActivity
     DatabaseReference databaseReference;
     ProgressBar progressBar;
     String tm;
+    LinearLayout li;
+    EditText querys;
+    Button ok;
     int pos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +70,9 @@ public class MainActivity extends AppCompatActivity
 
         listTamu = new ArrayList<Tamu>();
         tm = "";
+        li = (LinearLayout) findViewById(R.id.search);
+        querys = (EditText) findViewById(R.id.query);
+        ok = (Button) findViewById(R.id.ok);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         helper = new DBHelper(getApplicationContext());
@@ -67,7 +82,29 @@ public class MainActivity extends AppCompatActivity
 
 
         loadFirebase();
-//        refreshList();
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFirebase();
+            }
+        });
+        querys.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                loadFirebase();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -89,7 +126,11 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
     public void loadFirebase(){
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        Query query = databaseReference
+                .orderByChild("guest_name")
+                .startAt(querys.getText().toString())
+                .endAt(querys.getText().toString() + "\uf8ff");
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                 listTamu.clear();
@@ -98,7 +139,7 @@ public class MainActivity extends AppCompatActivity
                     Tamu tamu = snapshot.getValue(Tamu.class);
                     listTamu.add(tamu);
                 }
-
+                Collections.reverse(listTamu);
                 adapterTamu  = new RecyclerAdapterTamu(MainActivity.this,listTamu);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(layoutManager);
@@ -121,6 +162,8 @@ public class MainActivity extends AppCompatActivity
                         timePickerDialog.show(getFragmentManager(),"Time Picker Dialog");
                     }
                 });
+
+                li.setVisibility(View.VISIBLE);
             }
 
             @Override

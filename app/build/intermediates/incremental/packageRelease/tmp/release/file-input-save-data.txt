@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sat Jan 05 21:23:00 ICT 2019
+#Sun Jan 06 09:35:15 ICT 2019
 1.base=D\:\\Android\\Projects\\BukuTamu\\app\\build\\intermediates\\merged_assets\\release\\mergeReleaseAssets\\out
 0.baseType=DIRECTORY
 1.baseType=DIRECTORY
